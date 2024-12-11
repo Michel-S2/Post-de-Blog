@@ -1,8 +1,10 @@
 'use client'
 
-import { createContext, Dispatch, ReactNode, useReducer, useState } from "react";
+import { createContext, Dispatch, ReactNode, useContext, useEffect, useReducer, useState } from "react";
 import { Post } from "../types/Post";
 import { PostActions, postReducer } from "../reducers/postReducer";
+
+const STORAGE_KEY = 'PostContent'
 
 type PostContextType = {
     posts: Post[];
@@ -17,7 +19,11 @@ type Props = {
 
 export const PostContextProvider = ({children}: Props) => {
     //Adicionamos o reducer
-    const [posts, dispatch] = useReducer(postReducer, []);
+    const [posts, dispatch] = useReducer(postReducer, JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+    }, [posts])
 
 
     return (
@@ -26,3 +32,6 @@ export const PostContextProvider = ({children}: Props) => {
         </PostContext.Provider>
     )
 }
+
+//Criamos uma função e retornarmos o useContext com  o PostContext
+export const usePosts = () => useContext(PostContext);

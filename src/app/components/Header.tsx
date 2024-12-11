@@ -1,13 +1,13 @@
 'use client'
 
-import { useContext, useState } from "react"
-import { PostContext } from "../context/PostContext"
+import { useState } from "react"
+import { usePosts } from "../context/PostContext"
 
 export const Header = () => {
 
     const [title, setTitle] = useState<string>(''); // Estado para armazenar o título
     const [message, setMessage] = useState<string>(''); // Estado para armazenar a mensagem
-    const postCtx = useContext(PostContext); // Usando o contexto
+    const postCtx = usePosts();
 
     //Função para adicionar
     const handleAdd = () => {
