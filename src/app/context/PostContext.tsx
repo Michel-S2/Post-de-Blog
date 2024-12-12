@@ -19,10 +19,16 @@ type Props = {
 
 export const PostContextProvider = ({children}: Props) => {
     //Adicionamos o reducer
-    const [posts, dispatch] = useReducer(postReducer, JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+    const [posts, dispatch] = useReducer(postReducer, []);
+
 
     useEffect(() => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+        const storedPosts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        storedPosts.forEach((post: Post) => dispatch({ type: 'add', payload: post })); // Adicione uma ação para inicializar os posts
+    }, []);
+
+    useEffect(() => {
+         localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
     }, [posts])
 
 
